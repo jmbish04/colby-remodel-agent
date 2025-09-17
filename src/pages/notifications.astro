@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NotificationsClient from '../components/NotificationsClient';
+---
+
+<Layout title="Notifications | Colby Remodel Agent">
+  <main class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-4">Notifications Demo</h1>
+    <p class="mb-6">This page demonstrates real-time notifications using Durable Objects. Open this page in multiple browser tabs to see messages broadcast to all clients connected to the same ID.</p>
+    
+    {/* Using a static ID for demonstration purposes */}
+    <NotificationsClient client:load id="project-123" />
+  </main>
+</Layout>

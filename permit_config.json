@@ -1,0 +1,36 @@
+{
+    "projectName": "Home Remodel Permit Tracker",
+    "description": "A web application to monitor the status of building, plumbing, electrical, and routing permits for a specific property in San Francisco.",
+    "projectConfig": {
+      "address": {
+        "block": "5934",
+        "lot": "005"
+      }
+    },
+    "dataSources": [
+      {
+        "name": "building_permits",
+        "type": "building",
+        "description": "Fetches all building permits for the specified block and lot.",
+        "url": "https://data.sfgov.org/api/v3/views/i98e-djp9/query.json?query=SELECT%0A%20%20%60permit_number%60%2C%0A%20%20%60permit_type%60%2C%0A%20%20%60permit_type_definition%60%2C%0A%20%20%60permit_creation_date%60%2C%0A%20%20%60block%60%2C%0A%20%20%60lot%60%2C%0A%20%20%60street_number%60%2C%0A%20%20%60street_number_suffix%60%2C%0A%20%20%60street_name%60%2C%0A%20%20%60street_suffix%60%2C%0A%20%20%60unit%60%2C%0A%20%20%60unit_suffix%60%2C%0A%20%20%60description%60%2C%0A%20%20%60status%60%2C%0A%20%20%60status_date%60%2C%0A%20%20%60filed_date%60%2C%0A%20%20%60issued_date%60%2C%0A%20%20%60completed_date%60%2C%0A%20%20%60first_construction_document_date%60%2C%0A%20%20%60approved_date%60%2C%0A%20%20%60structural_notification%60%2C%0A%20%20%60number_of_existing_stories%60%2C%0A%20%20%60number_of_proposed_stories%60%2C%0A%20%20%60voluntary_soft_story_retrofit%60%2C%0A%20%20%60fire_only_permit%60%2C%0A%20%20%60estimated_cost%60%2C%0A%20%20%60revised_cost%60%2C%0A%20%20%60existing_use%60%2C%0A%20%20%60existing_units%60%2C%0A%20%20%60proposed_use%60%2C%0A%20%20%60proposed_units%60%2C%0A%20%20%60plansets%60%2C%0A%20%20%60tidf_compliance%60%2C%0A%20%20%60existing_occupancy%60%2C%0A%20%20%60proposed_occupancy%60%2C%0A%20%20%60existing_construction_type%60%2C%0A%20%20%60existing_construction_type_description%60%2C%0A%20%20%60proposed_construction_type%60%2C%0A%20%20%60proposed_construction_type_description%60%2C%0A%20%20%60site_permit%60%2C%0A%20%20%60last_permit_activity_date%60%2C%0A%20%20%60application_submission_method%60%2C%0A%20%20%60adu%60%2C%0A%20%20%60primary_address_flag%60%2C%0A%20%20%60supervisor_district%60%2C%0A%20%20%60neighborhoods_analysis_boundaries%60%2C%0A%20%20%60zipcode%60%2C%0A%20%20%60location%60%2C%0A%20%20%60point_source%60%2C%0A%20%20%60reroof%60%2C%0A%20%20%60record_id%60%2C%0A%20%20%60data_as_of%60%2C%0A%20%20%60data_loaded_at%60%0AWHERE%20caseless_one_of(%60block%60%2C%20%225934%22)%20AND%20caseless_one_of(%60lot%60%2C%20%22005%22)"
+      },
+      {
+        "name": "plumbing_permits",
+        "type": "plumbing",
+        "description": "Fetches all plumbing permits for the specified block and lot.",
+        "url": "https://data.sfgov.org/api/v3/views/a6aw-rudh/query.json?query=SELECT%0A%20%20%60permit_number%60%2C%0A%20%20%60application_date%60%2C%0A%20%20%60block%60%2C%0A%20%20%60lot%60%2C%0A%20%20%60parcel_number%60%2C%0A%20%20%60street_number%60%2C%0A%20%20%60street_number_suffix%60%2C%0A%20%20%60street_name%60%2C%0A%20%20%60street_suffix%60%2C%0A%20%20%60unit%60%2C%0A%20%20%60unit_suffix%60%2C%0A%20%20%60description%60%2C%0A%20%20%60status%60%2C%0A%20%20%60filed_date%60%2C%0A%20%20%60issued_date%60%2C%0A%20%20%60completed_date%60%2C%0A%20%20%60neighborhoods_analysis_boundaries%60%2C%0A%20%20%60supervisor_district%60%2C%0A%20%20%60zipcode%60%2C%0A%20%20%60location%60%2C%0A%20%20%60point_source%60%2C%0A%20%20%60data_as_of%60%2C%0A%20%20%60data_loaded_at%60%0AWHERE%20caseless_one_of(%60block%60%2C%20%225934%22)%20AND%20caseless_one_of(%60lot%60%2C%20%22005%22)"
+      },
+      {
+        "name": "electrical_permits",
+        "type": "electrical",
+        "description": "Fetches all electrical permits for the specified block and lot.",
+        "url": "https://data.sfgov.org/api/v3/views/ftty-kx6y/query.json?query=SELECT%0A%20%20%60permit_number%60%2C%0A%20%20%60application_creation_date%60%2C%0A%20%20%60block%60%2C%0A%20%20%60lot%60%2C%0A%20%20%60street_number%60%2C%0A%20%20%60street_number_suffix%60%2C%0A%20%20%60street_name%60%2C%0A%20%20%60street_suffix%60%2C%0A%20%20%60unit%60%2C%0A%20%20%60unit_suffix%60%2C%0A%20%20%60description%60%2C%0A%20%20%60status%60%2C%0A%20%20%60filed_date%60%2C%0A%20%20%60issued_date%60%2C%0A%20%20%60completed_date%60%2C%0A%20%20%60permit_valuation%60%2C%0A%20%20%60neighborhoods_analysis_boundaries%60%2C%0A%20%20%60supervisor_district%60%2C%0A%20%20%60zip_code%60%2C%0A%20%20%60location%60%2C%0A%20%20%60point_source%60%2C%0A%20%20%60data_as_of%60%2C%0A%20%20%60data_loaded_at%60%0AWHERE%20caseless_one_of(%60block%60%2C%20%225934%22)%20AND%20caseless_one_of(%60lot%60%2C%20%22005%22)"
+      },
+      {
+        "name": "permit_routing_addenda",
+        "type": "routing",
+        "description": "Fetches the detailed routing and addenda information for a specific permit. The '{application_number}' parameter in the URL must be replaced with a valid number from the building_permits data.",
+        "url_template": "https://data.sfgov.org/api/v3/views/87xy-gk8d/query.json?query=SELECT%0A%20%20%60primary_key%60%2C%0A%20%20%60application_number%60%2C%0A%20%20%60addenda_number%60%2C%0A%20%20%60step%60%2C%0A%20%20%60station%60%2C%0A%20%20%60arrive%60%2C%0A%20%20%60assign_date%60%2C%0A%20%20%60start_date%60%2C%0A%20%20%60in_hold%60%2C%0A%20%20%60out_hold%60%2C%0A%20%20%60finish_date%60%2C%0A%20%20%60approved_date%60%2C%0A%20%20%60plan_checked_by%60%2C%0A%20%20%60hold_description%60%2C%0A%20%20%60title%60%2C%0A%20%20%60addenda_status%60%2C%0A%20%20%60department%60%2C%0A%20%20%60review_results%60%2C%0A%20%20%60data_as_of%60%2C%0A%20%20%60data_loaded_at%60%0AWHERE%20caseless_one_of(%60application_number%60%2C%20%22{application_number}%22)"
+      }
+    ]
+  }

@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PermitsView from '../components/PermitsView';
+---
+
+<Layout title="Permit Monitoring | Colby Remodel Agent">
+  <main class="container mx-auto py-8">
+    <PermitsView client:load />
+  </main>
+</Layout>

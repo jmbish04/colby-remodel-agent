@@ -1,0 +1,326 @@
+{
+  "projectName": "Colby Remodel Agent",
+  "projectDescription": "A comprehensive project management tool for remodeling projects, built on Cloudflare Workers, Next.js, and shadcn/ui.",
+  "epics": [
+    {
+      "epicName": "Phase 1: Core Functionality",
+      "priority": "High",
+      "status": "Not Started",
+      "tasks": [
+        {
+          "taskName": "Create CRUD API endpoints for projects, tasks, and contractors",
+          "status": "Completed",
+          "steps": [
+            "Define D1 database schemas for `projects`, `tasks`, and `contractors` tables.",
+            "Create Next.js API route handlers under `src/app/api/` for each resource (e.g., `src/app/api/projects/route.ts`).",
+            "Implement `GET` handlers to fetch all and single items from D1.",
+            "Implement `POST` handlers to create new items, using Zod for server-side validation.",
+            "Implement `PUT`/`PATCH` handlers for updates and `DELETE` handlers for removal in dynamic routes (e.g., `src/app/api/projects/[id]/route.ts`).",
+            "Ensure handlers correctly access D1 bindings via the worker context's `env` object."
+          ],
+          "success_criteria": [
+            "GET requests to `/api/[resource]` return a list of items.",
+            "POST requests with valid data create a new item and return a 201 status.",
+            "PUT/PATCH/DELETE requests to `/api/[resource]/[id]` correctly modify the data.",
+            "API returns appropriate 4xx/5xx error codes for invalid requests or server errors."
+          ],
+          "unit_test_criteria": [
+            "Write tests for each API endpoint using Vitest and Miniflare.",
+            "Mock the D1 binding to test database interactions without a live connection.",
+            "Test successful data creation, retrieval, update, and deletion (2xx status codes).",
+            "Test error handling for invalid data (400) and non-existent IDs (404)."
+          ]
+        },
+        {
+          "taskName": "Connect UI forms to the database",
+          "status": "Completed",
+          "steps": [
+            "Build reusable forms for `projects`, `tasks`, and `contractors` using shadcn `Form`, `Input`, `Textarea`, etc.",
+            "Integrate `react-hook-form` and `zod` for client-side validation.",
+            "Replace mock data fetching with calls to the newly created CRUD API endpoints.",
+            "Use a data fetching library like `SWR` or `TanStack Query` to manage server state, caching, and mutations."
+          ],
+          "success_criteria": [
+            "Users can create, view, update, and delete projects, tasks, and contractors through the UI.",
+            "Forms display validation errors correctly.",
+            "UI updates automatically after data mutations without requiring a page reload."
+          ],
+          "unit_test_criteria": [
+            "Use React Testing Library to test form components.",
+            "Mock API calls to verify form submission behavior.",
+            "Test that loading and error states are handled gracefully in the UI."
+          ]
+        },
+        {
+          "taskName": "Implement User Authentication System",
+          "status": "SKIPPED_FOR_NOW",
+          "steps": [
+            "Choose an edge-compatible authentication library (e.g., Lucia Auth, NextAuth.js with an adapter).",
+            "Create D1 schemas for `users` and `sessions` tables.",
+            "Build API routes for user signup, login, and logout.",
+            "Implement session management using secure, HTTP-only cookies.",
+            "Create a Next.js middleware (`middleware.ts`) to protect routes and manage authentication state."
+          ],
+          "success_criteria": [
+            "Users can sign up for a new account.",
+            "Users can log in and log out securely.",
+            "Protected pages are inaccessible to unauthenticated users.",
+            "User session is persisted across browser restarts."
+          ],
+          "unit_test_criteria": [
+            "Test login/logout API endpoints.",
+            "Test middleware logic to ensure it correctly protects routes.",
+            "Verify that secure, HTTP-only cookies are set and cleared correctly."
+          ]
+        },
+        {
+          "taskName": "Implement Role-Based Access Control (RBAC)",
+          "status": "SKIPPED_FOR_NOW",
+          "steps": [
+            "Add a `role` column (e.g., 'admin', 'contractor', 'homeowner') to the `users` table in D1.",
+            "Update the session logic to include the user's role.",
+            "Update the Next.js middleware to check roles for specific routes or API endpoints.",
+            "Conditionally render UI elements in the Next.js frontend based on the user's role."
+          ],
+          "success_criteria": [
+            "Admin users can access an admin-only section.",
+            "Contractors can only view and edit projects they are assigned to.",
+            "API endpoints reject requests from users with insufficient permissions."
+          ],
+          "unit_test_criteria": [
+            "Write middleware tests for different roles attempting to access protected resources.",
+            "Test API endpoint logic to ensure it enforces role-based permissions.",
+            "Test UI components to verify that role-specific elements are rendered correctly."
+          ]
+        }
+      ]
+    },
+    {
+      "epicName": "Phase 2: Enhanced Features",
+      "priority": "Medium",
+      "status": "Not Started",
+      "tasks": [
+        {
+          "taskName": "Implement Photo and Document Upload System with Cloudflare R2",
+          "status": "Completed",
+          "steps": [
+            "Create an R2 bucket in the Cloudflare dashboard and bind it to the worker in `wrangler.toml`.",
+            "Create a new API endpoint to generate signed (presigned) URLs for direct-to-R2 uploads.",
+            "Build a file upload component in the Next.js frontend using shadcn components (`Input type='file'`).",
+            "The component will first request a signed URL from the worker, then upload the file directly to R2 using that URL.",
+            "Create another API endpoint to list or retrieve files associated with a project/task."
+          ],
+          "success_criteria": [
+            "Users can upload images and documents from the UI.",
+            "Files are successfully stored in the R2 bucket.",
+            "Uploaded files can be viewed or downloaded within the application.",
+            "Uploads do not pass through the worker, minimizing egress costs."
+          ],
+          "unit_test_criteria": [
+            "Test the API endpoint that generates signed URLs.",
+            "Mock R2 bindings to test file listing and metadata retrieval logic.",
+            "Use end-to-end tests (e.g., Playwright) to simulate the file upload flow."
+          ]
+        },
+        {
+          "taskName": "Implement Real-time Notifications with Durable Objects",
+          "status": "Completed",
+          "steps": [
+            "Define a Durable Object class to manage WebSocket connections for a specific user or project.",
+            "Configure the Durable Object binding in `wrangler.toml`.",
+            "Implement `fetch` and `webSocketMessage` handlers in the Durable Object to manage state and broadcast updates.",
+            "Create a WebSocket connection from the Next.js client to the Durable Object.",
+            "Trigger notifications from API endpoints by sending requests to the relevant Durable Object instance."
+          ],
+          "success_criteria": [
+            "Users receive real-time notifications for events like new task assignments or project updates.",
+            "UI updates in real-time across multiple clients without manual refreshes.",
+            "The system can handle multiple concurrent WebSocket connections."
+          ],
+          "unit_test_criteria": [
+            "Write unit tests for the Durable Object class logic.",
+            "Test WebSocket connection handling and message broadcasting.",
+            "Verify that state is correctly managed within the Durable Object."
+          ]
+        },
+        {
+          "taskName": "Integrate Google Calendar API",
+          "status": "Completed",
+          "steps": [
+            "Set up a Google Cloud project and enable the Calendar API.",
+            "Configure OAuth 2.0 credentials and store them as encrypted secrets for the worker.",
+            "Implement OAuth flow for users to authorize access to their Google Calendar.",
+            "Create server-side functions within the worker to create/update calendar events when tasks are scheduled.",
+            "Use a cron trigger in `wrangler.toml` to periodically sync task deadlines with the calendar."
+          ],
+          "success_criteria": [
+            "Users can link their Google Calendar account.",
+            "Creating or updating a task with a due date automatically creates a corresponding event in the user's Google Calendar.",
+            "Changes are synced between the app and the calendar."
+          ],
+          "unit_test_criteria": [
+            "Mock the Google Calendar API client to test integration logic.",
+            "Test the OAuth token exchange and refresh logic.",
+            "Test the functions that create and format calendar events."
+          ]
+        }
+      ]
+    },
+    {
+      "epicName": "Phase 3: Permit Monitoring & Public Data Integration",
+      "priority": "High",
+      "status": "Not Started",
+      "tasks": [
+        {
+          "taskName": "Backend: Implement Hourly SFGov Permit Data Ingestion",
+          "status": "Completed",
+          "steps": [
+            "Define D1 schemas for `permits` (to store building, plumbing, electrical) and `permit_history` (to log changes).",
+            "Create a dedicated Cloudflare Worker function for fetching data from the four SFGov API endpoints.",
+            "Implement logic to compare newly fetched data against existing data in the `permits` table.",
+            "If a permit is new, insert it. If an existing permit's status, date, or cost changes, update the record and create a new entry in `permit_history` logging the change.",
+            "Implement the chained API call: for each building permit, fetch its related routing/addenda data.",
+            "Configure a cron trigger in `wrangler.toml` to execute this function hourly (e.g., `0 * * * *`)."
+          ],
+          "success_criteria": [
+            "The worker successfully runs every hour and fetches data from all permit APIs.",
+            "New permits are added to the D1 `permits` table.",
+            "All changes to existing permits (e.g., status, dates) are logged in the `permit_history` table.",
+            "The system correctly fetches and associates addenda data with the parent building permit."
+          ],
+          "unit_test_criteria": [
+            "Mock the `fetch` API to return sample SFGov data.",
+            "Write tests for the data comparison ('diffing') logic to ensure changes are detected and logged correctly.",
+            "Verify that new and updated records are written to the mock D1 instance as expected."
+          ]
+        },
+        {
+          "taskName": "Backend: Create API Endpoint for Permit Data",
+          "status": "Completed",
+          "steps": [
+            "Create a new Next.js API route handler: `src/app/api/permits/route.ts`.",
+            "Implement a `GET` handler that queries the `permits` and `permit_history` tables from the D1 database.",
+            "Structure the JSON response to provide a clean, consolidated list of all permits and their associated change logs.",
+            "Apply the authentication middleware to this route to ensure only authorized users can access it."
+          ],
+          "success_criteria": [
+            "A GET request to `/api/permits` returns a complete list of permits and their history.",
+            "The API endpoint is protected and inaccessible to unauthenticated users.",
+            "The response is structured efficiently for frontend consumption."
+          ],
+          "unit_test_criteria": [
+            "Mock the D1 binding and test that the API endpoint correctly queries and formats data.",
+            "Write tests to confirm that the authentication middleware properly protects the endpoint."
+          ]
+        },
+        {
+          "taskName": "Frontend: Build Permit Monitoring Dashboard UI",
+          "status": "Completed",
+          "steps": [
+            "Create a new page in the Next.js app at `src/app/dashboard/permits/page.tsx`.",
+            "Use TanStack Query or SWR to fetch data from the `/api/permits` endpoint.",
+            "Design and build a UI using shadcn `Table` and `Card` components to display the list of all permits.",
+            "Clearly display key information for each permit: number, type (using a `Badge`), status, description, and key dates.",
+            "Handle loading and error states gracefully."
+          ],
+          "success_criteria": [
+            "Users can view all their remodel permits on a dedicated dashboard page.",
+            "The permit type, status, and important dates are clearly visible.",
+            "The UI provides feedback to the user while data is being fetched."
+          ],
+          "unit_test_criteria": [
+            "Use React Testing Library to render the dashboard.",
+            "Mock the `/api/permits` API call and verify that the permit data is correctly rendered in the table and cards."
+          ]
+        },
+        {
+          "taskName": "Frontend: Implement Permit Change History View",
+          "status": "Completed",
+          "steps": [
+            "Enhance the permit dashboard UI to indicate which permits have recent updates (e.g., a colored dot or 'Updated' badge).",
+            "Implement a `Dialog` or `Sheet` component from shadcn that opens when a user clicks on a permit for more details.",
+            "Within the detail view, display the permit's full routing and addenda information.",
+            "Render a timeline or a simple log of changes for that permit using the data from the `permit_history` table."
+          ],
+          "success_criteria": [
+            "The UI visually flags permits with recent changes.",
+            "Users can click on a permit to open a detailed view with its full history.",
+            "The change history is presented in a clear, chronological order that is easy for a homeowner to understand."
+          ],
+          "unit_test_criteria": [
+            "Test the detail view component by providing mock permit and history data.",
+            "Verify that the timeline of changes is rendered accurately based on the mock data."
+          ]
+        }
+      ]
+    },
+    {
+      "epicName": "Phase 5: Production Readiness",
+      "priority": "High",
+      "status": "Not Started",
+      "tasks": [
+        {
+          "taskName": "Set up CI/CD Pipeline with GitHub Actions",
+          "status": "Completed",
+          "steps": [
+            "Create a GitHub Actions workflow file (`.github/workflows/deploy.yml`).",
+            "Add steps to install dependencies, run linting, and execute unit tests.",
+            "Configure a step to build the Next.js application.",
+            "Use the `wrangler-action` to deploy the worker to Cloudflare.",
+            "Set up Cloudflare API tokens as GitHub secrets.",
+            "Configure separate deployment jobs for staging (on PR merge) and production (on git tag)."
+          ],
+          "success_criteria": [
+            "Code is automatically tested and linted on every push.",
+            "Merging a pull request to the `main` branch deploys to a staging environment.",
+            "Creating a new release tag deploys to the production environment.",
+            "The pipeline fails if any test or build step fails."
+          ],
+          "unit_test_criteria": [
+            "This is a DevOps task; success is validated by the pipeline running successfully and deploying the application as expected."
+          ]
+        },
+        {
+          "taskName": "Implement Error Monitoring and Performance Monitoring",
+          "status": "Completed",
+          "steps": [
+            "Choose a monitoring service compatible with Cloudflare Workers (e.g., Sentry).",
+            "Integrate the service's SDK into the worker's entry point to catch unhandled exceptions.",
+            "Wrap key functions in `try...catch` blocks to manually report errors with additional context.",
+            "Configure source maps to be uploaded during the CI/CD process for readable stack traces.",
+            "Enable performance monitoring to track API endpoint latency and worker execution time."
+          ],
+          "success_criteria": [
+            "Unhandled exceptions in the worker are automatically reported to the monitoring service.",
+            "Developers are alerted to new or high-frequency errors.",
+            "Performance bottlenecks in API routes or worker logic can be identified."
+          ],
+          "unit_test_criteria": [
+            "Write a test that intentionally throws an error and verify the monitoring service's client is called.",
+            "Confirm that reported errors include useful context and correct source mapping."
+          ]
+        },
+        {
+          "taskName": "Implement Automated Database Backups",
+          "status": "Completed",
+          "steps": [
+            "Create a new Cloudflare Worker dedicated to backups.",
+            "Bind the production D1 database and an R2 bucket to this new worker in `wrangler.toml`.",
+            "Write a script in the worker that uses `D1.dump()` to create a SQL backup of the database.",
+            "Upload the generated SQL file to the R2 bucket.",
+            "Configure a cron trigger in `wrangler.toml` to run the backup worker on a daily schedule (e.g., `0 0 * * *`)."
+          ],
+          "success_criteria": [
+            "A full backup of the D1 database is automatically created every 24 hours.",
+            "Backups are stored securely and durably in an R2 bucket.",
+            "A procedure is documented for restoring the database from a backup."
+          ],
+          "unit_test_criteria": [
+            "Test the backup script locally using Miniflare with mock D1 and R2 bindings.",
+            "Verify that the backup file is correctly created and uploaded to the mock R2 service."
+          ]
+        }
+      ]
+    }
+  ]
+}

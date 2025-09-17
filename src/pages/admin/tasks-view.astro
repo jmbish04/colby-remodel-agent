@@ -1,0 +1,44 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import '@/styles/globals.css';
+---
+
+<Layout title="Task Management - Colby Remodel Agent">
+  <main class="h-screen flex flex-col">
+    <div class="border-b p-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold">Advanced Task Management</h1>
+          <p class="text-muted-foreground">Comprehensive task tracking with data tables and analytics</p>
+        </div>
+        <div class="flex gap-4">
+          <a href="/admin/tasks" class="text-sm text-muted-foreground hover:text-foreground underline">
+            Kanban View
+          </a>
+          <a href="/admin/timeline" class="text-sm text-muted-foreground hover:text-foreground underline">
+            Timeline View
+          </a>
+          <a href="/admin" class="text-sm text-muted-foreground hover:text-foreground underline">
+            Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-1 overflow-hidden">
+      <div id="tasks-view-container" class="h-full"></div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { jsx as _jsx } from "react/jsx-runtime";
+  import { createRoot } from "react-dom/client";
+  import TasksView from "@/components/admin/TasksView.tsx";
+
+  const container = document.getElementById("tasks-view-container");
+  if (container) {
+    const root = createRoot(container);
+    root.render(_jsx(TasksView, {}));
+  }
+</script>

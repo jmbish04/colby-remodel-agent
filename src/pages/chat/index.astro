@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import '@/styles/globals.css';
+---
+
+<Layout title="AI Assistant - Colby Remodel Agent">
+  <main class="container mx-auto p-4 h-screen flex flex-col">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">AI Assistant</h1>
+        <p class="text-muted-foreground">Get help with your renovation projects</p>
+      </div>
+      <div class="flex gap-4 text-sm">
+        <a 
+          href="/chat/sources" 
+          class="text-muted-foreground hover:text-foreground underline"
+        >
+          Try with Sources
+        </a>
+        <a 
+          href="/admin" 
+          class="text-muted-foreground hover:text-foreground underline"
+        >
+          Admin Dashboard
+        </a>
+      </div>
+    </div>
+    
+    <div class="flex-1 min-h-0">
+      <div id="chat-container" class="h-full"></div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { jsx as _jsx } from "react/jsx-runtime";
+  import { createRoot } from "react-dom/client";
+  import Chat from "@/components/chat/Chat.tsx";
+
+  const container = document.getElementById("chat-container");
+  if (container) {
+    const root = createRoot(container);
+    root.render(_jsx(Chat, {}));
+  }
+</script>

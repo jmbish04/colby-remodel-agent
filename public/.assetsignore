@@ -1,0 +1,12 @@
+# This file tells Cloudflare Pages to ignore certain files when building
+# Add any files you don't want to be processed or uploaded
+
+# Development files
+*.md
+.gitignore
+*.log
+
+# Source files that should be compiled, not served directly
+src/
+migrations/
+wrangler.toml

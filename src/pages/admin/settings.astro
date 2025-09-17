@@ -1,0 +1,41 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import '@/styles/globals.css';
+---
+
+<Layout title="Settings - Colby Remodel Agent">
+  <main class="h-screen flex flex-col">
+    <div class="border-b p-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold">Settings</h1>
+          <p class="text-muted-foreground">Manage your preferences and system configuration</p>
+        </div>
+        <div class="flex gap-4">
+          <a href="/admin/apps" class="text-sm text-muted-foreground hover:text-foreground underline">
+            Apps
+          </a>
+          <a href="/admin" class="text-sm text-muted-foreground hover:text-foreground underline">
+            Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-1 overflow-hidden">
+      <div id="settings-view-container" class="h-full"></div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { jsx as _jsx } from "react/jsx-runtime";
+  import { createRoot } from "react-dom/client";
+  import SettingsView from "@/components/admin/SettingsView.tsx";
+
+  const container = document.getElementById("settings-view-container");
+  if (container) {
+    const root = createRoot(container);
+    root.render(_jsx(SettingsView, {}));
+  }
+</script>

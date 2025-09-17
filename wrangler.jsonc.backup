@@ -1,0 +1,37 @@
+{
+  "name": "colby-remodel-agent",
+  "main": "./dist/index.js",
+  "assets": {
+    "directory": "./dist"
+  },
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true,
+  "vars": {
+    "ENVIRONMENT": "production",
+    "AGENT_NAME": "Colby Remodel Agent"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "colby-remodel-db",
+      "database_id": "placeholder-db-id"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "PROJECT_KV",
+      "id": "placeholder-kv-id"
+    }
+  ],
+  "workflows": [
+    {
+      "name": "colby-remodel-project-workflow",
+      "binding": "PROJECT_WORKFLOW",
+      "class_name": "ProjectWorkflow"
+    }
+  ]
+}

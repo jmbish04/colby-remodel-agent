@@ -1,0 +1,55 @@
+name = "colby-remodel-agent"
+main = "./dist/index.js"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./dist"
+
+
+[observability]
+enabled = true
+
+
+[vars]
+ENVIRONMENT = "production"
+AGENT_NAME = "Colby Remodel Agent"
+# [DONE] Add your OpenAI API key as a secret (use: wrangler secret put OPENAI_API_KEY)
+# OPENAI_API_KEY will be available in production as an environment variable
+
+[[d1_databases]]
+binding = "DB"
+database_name = "colby-remodel-agent"
+database_id = "670563cf-1f1d-4469-aea4-ca0fbfec3039"
+
+[[kv_namespaces]]
+binding = "PROJECT_KV"
+id = "f09fe0049bea40c79ee0935e86969e27"
+
+[[r2_buckets]]
+binding = "UPLOADS"
+bucket_name = "colby-remodel-agent-uploads"
+
+[[durable_objects.bindings]]
+name = "NOTIFICATION_MANAGER"
+class_name = "NotificationManager"
+
+[triggers]
+crons = ["0 * * * *"] # Run every hour
+
+[[workers]]
+name = "backup-worker"
+main = "src/workers/backup.ts"
+compatibility_date = "2025-04-01"
+d1_databases = [
+  { binding = "DB", database_name = "colby-remodel-agent", database_id = "670563cf-1f1d-4469-aea4-ca0fbfec3039" }
+]
+r2_buckets = [
+  { binding = "UPLOADS", bucket_name = "colby-remodel-agent-uploads" }
+]
+triggers = { crons = ["0 0 * * *"] } # Run once a day at midnight
+
+[[workflows]]
+name = "colby-remodel-project-workflow"
+binding = "PROJECT_WORKFLOW"
+class_name = "ProjectWorkflow"
