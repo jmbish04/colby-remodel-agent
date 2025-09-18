@@ -1,6 +1,6 @@
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import * as React from "react";
 
 interface ActionsProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -43,4 +43,4 @@ const Action = React.forwardRef<HTMLButtonElement, ActionProps>(
 );
 Action.displayName = "Action";
 
-export { Actions, Action };
+export { Action, Actions };
